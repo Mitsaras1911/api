@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - ays.cy@127.0.0.1" uuid="02b52a49-425b-49b3-b2d8-9583847a92ef">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>ays.cy.*</schema-pattern>
+      <default-schemas>ays.cy.*</default-schemas>
+    </data-source>
+  </component>
+</project>
