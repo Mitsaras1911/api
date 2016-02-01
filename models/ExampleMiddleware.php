@@ -6,21 +6,24 @@
  * Date: 2/1/2016
  * Time: 12:17 PM
  */
-class ExampleMiddleware
+class ExampleMiddleware extends Slim\Middleware
 {
 
     /**
-     * @param $request
-     * @param $response
-     * @param $next
-     * @return mixed
+     * Call
+     *
+     * Perform actions specific to this middleware and optionally
+     * call the next downstream middleware.
      */
-    public function __invoke($request, $response, $next)
+    public function call()
     {
-        $response->getBody()->write('BEFORE');
-        $response = $next($request, $response);
-        $response->getBody()->write('AFTER');
+        //$key = $this->app->request()->getResourceUri();
+        //$rsp = $this->app->response();
+        $token = $this->app->request->params('token');
+        $user_id = $this->app->request->params('user_id');
 
-        return $response;
+        UserAuth::authenticate($token, $user_id);
+        // cache miss... continue on to generate the page
+        $this->next->call();
     }
 }

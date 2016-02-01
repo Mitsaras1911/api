@@ -5,20 +5,22 @@ require('vendor/autoload.php');
 
 //Database Connection
 include 'config/db_config.php';
-
-
 \Slim\Slim::registerAutoloader();
 
+//Initiate a Slim instance
 $app = new \Slim\Slim();
+
+$app->add(new ExampleMiddleware());
 
 //Server cross
 header('content-type: application/json; charset=utf-8');
 header("access-control-allow-origin: *");
 
+
 // route middleware for simple API authentication
-$app->get('/', function ($req, $res, $args) {
-    echo ' Hello ';
-})->add( new ExampleMiddleware());
+$app->get('/', function () {
+    echo ' World ';
+});
 
 //----------------------------------------
 //API STARTS HERE
