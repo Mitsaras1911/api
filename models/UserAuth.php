@@ -52,7 +52,7 @@ class UserAuth extends  Illuminate\Database\Eloquent\Model
     {
         $u = UserAuth::query()->where('token', $token)->get();
         if (count($u)==0){
-            exit("Access Denied");
+            return false;
         }
         else
             return UserAuth::new_authenticate($user_id);

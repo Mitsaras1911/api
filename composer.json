@@ -5,8 +5,8 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/database": "@dev",
-        "slim/slim": "2.*",
-        "tuupola/slim-basic-auth" : "1.0"
+        "slim/slim": "2.*"
+
     },
     "autoload": {
         "files":["config/db_config.php"],

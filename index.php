@@ -15,12 +15,10 @@ $app = new \Slim\Slim();
 header('content-type: application/json; charset=utf-8');
 header("access-control-allow-origin: *");
 
-
-
-$app->get("/", function() use($app) {
-
-    echo "API workin... ";
-});
+// route middleware for simple API authentication
+$app->get('/', function ($req, $res, $args) {
+    echo ' Hello ';
+})->add( new ExampleMiddleware());
 
 //----------------------------------------
 //API STARTS HERE
@@ -80,7 +78,6 @@ $app->post("/user/profile/", function () use ($app) {
     $token = $app->request->params('token');
     UserAuth::authenticate($user_id,$token);//Authenticate or Fail
     $u = User::find($user_id);//Find User
-    $u->userToken;
     $u->userToken;
     $app->response->body($u->toJson());
 });
