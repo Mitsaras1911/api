@@ -15,15 +15,18 @@ class ExampleMiddleware extends Slim\Middleware
      * Perform actions specific to this middleware and optionally
      * call the next downstream middleware.
      */
-    public function call()
-    {
+    public function call(){
         //$key = $this->app->request()->getResourceUri();
         //$rsp = $this->app->response();
         $token = $this->app->request->params('token');
         $user_id = $this->app->request->params('user_id');
+        $res = UserAuth::authenticate($token, $user_id);
+        if ($res){
+            // cache miss... continue on to generate the page
+            $this->next->call();
+        }
+        else
+        exit('error');
 
-        UserAuth::authenticate($token, $user_id);
-        // cache miss... continue on to generate the page
-        $this->next->call();
     }
 }

@@ -31,6 +31,23 @@ class UserAuth extends  Illuminate\Database\Eloquent\Model
     }
 
     //Generate Access Token
+
+
+
+    public static function authenticate($token,$user_id){
+        $u = UserAuth:: query()
+                        ->where('token', $token)
+                        ->where('user_id',$user_id)
+                        ->get();
+        if ($u->count()==1){
+            echo 'irta!';
+            return true;
+        }
+        else return false;
+    }
+
+
+
     public static function getGUID()
     {
         if (function_exists('com_create_guid')) {
@@ -45,19 +62,5 @@ class UserAuth extends  Illuminate\Database\Eloquent\Model
                 . substr($charid, 20, 12);
             return $uuid;
         }
-    }
-
-
-    public static function authenticate($user_id, $token)
-    {
-        $u = UserAuth::query()->where('token', $token)->get();
-        if (count($u)==0){
-            return false;
-        }
-        else
-            return UserAuth::new_authenticate($user_id);
-
-        //TODO: Na rotiso to xatzi pos na kamo terminate to $app pu tutin tin function
-
     }
 }
