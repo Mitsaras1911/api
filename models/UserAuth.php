@@ -40,14 +40,12 @@ class UserAuth extends  Illuminate\Database\Eloquent\Model
                         ->where('user_id',$user_id)
                         ->get();
         if ($u->count()==1){
-            echo 'irta!';
             return true;
         }
-        else return false;
+        else {
+            return false;
+        }
     }
-
-
-
     public static function getGUID()
     {
         if (function_exists('com_create_guid')) {

@@ -26,7 +26,6 @@ class ExampleMiddleware extends Slim\Middleware
             $this->next->call();
         }
         else
-        exit('error');
-
+        $this->app->response->body(\MongoDB\BSON\toJSON('error'));
     }
 }

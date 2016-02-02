@@ -31,15 +31,6 @@ class User extends Illuminate\Database\Eloquent\Model
         return $this->hasMany('Feedback','from','id');
     }
 
-    //Handle Model Failure
-    public static function findUser($user_id){
-        try {
-            $user = User::findOrFail($user_id);
-        }
-        catch (Exception $e) {
-            echo 'No User Found: ',  $e->getMessage(), "\n";
-        }
-    }
 
     //User Sign In
     static function sign_in($params){
@@ -86,7 +77,9 @@ class User extends Illuminate\Database\Eloquent\Model
         $jobs = Job::query()
             ->where('poster_id', $id)
             ->get();
+        echo 'hello';
         return $jobs;
+
     }
 
     //Update User Profile
@@ -102,7 +95,6 @@ class User extends Illuminate\Database\Eloquent\Model
         $u = new User();
         $u->query()->where('privillege','PRO')->get();
         return $u;
-
     }
 }
 
