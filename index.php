@@ -64,10 +64,8 @@ $app->post('/sign_up/', function () use($app)
 
 
 //User Jobs
-$app->get("/user/jobs/:user_id", function ($user_id) use ($app)
-{
-    $token = $app->request->params('token');
-    UserAuth::authenticate($user_id,$token);//Authenticate or Fail
+$app->get("/user/jobs/:user_id", function ($user_id) use ($app) {
+    UserAuth::new_key($user_id);
     $u = User::find($user_id);//Find User
     $u->jobs;
     $u->userToken;

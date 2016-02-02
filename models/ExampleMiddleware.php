@@ -19,13 +19,12 @@ class ExampleMiddleware extends Slim\Middleware
         //$key = $this->app->request()->getResourceUri();
         //$rsp = $this->app->response();
         $token = $this->app->request->params('token');
-        $user_id = $this->app->request->params('user_id');
-        $res = UserAuth::authenticate($token, $user_id);
-        if ($res){
-            // cache miss... continue on to generate the page
+        $res = UserAuth::authenticate($token);
+        if ($res){//Found User
+            //Generate new token
             $this->next->call();
         }
         else
-        $this->app->response->body(\MongoDB\BSON\toJSON('error'));
+        $this->app->response->body(json_encode(['error'=>'denied']));
     }
 }

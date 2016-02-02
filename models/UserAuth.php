@@ -12,14 +12,10 @@ class UserAuth extends  Illuminate\Database\Eloquent\Model
     protected $table = 'user_auth';//Define table name
     protected $fillable = ['token', 'user_id'];
 
-    public function userKey($user_id, $token)
-    {
-        return $this->hasOne('User', 'user_id', 'user_id');
-    }
 
 
     //Create user token
-    public static function new_authenticate($user_id)
+    public static function new_key($user_id)
     {
         $u = UserAuth::firstOrNew([
             'user_id' => $user_id
@@ -27,17 +23,12 @@ class UserAuth extends  Illuminate\Database\Eloquent\Model
         $u->token = UserAuth::getGUID();
         $u->last_date_authorized = date("Y-m-d H:i:s");
         $u->save();
-        return $u->token;
     }
 
     //Generate Access Token
-
-
-
-    public static function authenticate($token,$user_id){
+    public static function authenticate($token){
         $u = UserAuth:: query()
                         ->where('token', $token)
-                        ->where('user_id',$user_id)
                         ->get();
         if ($u->count()==1){
             return true;
