@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="aeac2b84-50c1-43c8-8c89-66eb8fc772db" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/ExampleMiddleware.php" afterPath="$PROJECT_DIR$/models/ExampleMiddleware.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/UserAuth.php" afterPath="$PROJECT_DIR$/models/UserAuth.php" />
     </list>
     <ignored path="api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1515,7 +1512,13 @@
       <option name="project" value="LOCAL" />
       <updated>1454411468800</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Finished New token&#10;Ask for this - How to">
+      <created>1454413155979</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1454413155979</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1575,7 +1578,8 @@
     </ignored-roots>
     <MESSAGE value="API Commit&#10;Converted from Procedural to OOP&#10;Using Eloquent ORM from Laravl" />
     <MESSAGE value="First API Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="First API Commit" />
+    <MESSAGE value="Finished New token&#10;Ask for this - How to" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished New token&#10;Ask for this - How to" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
