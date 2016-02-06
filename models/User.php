@@ -91,11 +91,6 @@ class User extends Illuminate\Database\Eloquent\Model
         }
     }
 
-    public static function getPro(){
-        $u = new User();
-        $u->query()->where('privillege','PRO')->get();
-        return $u;
-    }
 }
 
 
