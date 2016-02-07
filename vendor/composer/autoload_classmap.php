@@ -10,6 +10,7 @@ return array(
     'Feedback' => $baseDir . '/models/Feedback.php',
     'Functions' => $baseDir . '/models/Functions.php',
     'Job' => $baseDir . '/models/Job.php',
+    'JobAwards' => $baseDir . '/models/JobAwards.php',
     'Job_category' => $baseDir . '/models/Job_category.php',
     'User' => $baseDir . '/models/User.php',
     'UserAuth' => $baseDir . '/models/UserAuth.php',

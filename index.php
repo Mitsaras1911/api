@@ -109,7 +109,10 @@ $app->post('/email', function () use($app) {
 
 //Get all pros
 $app->get('/getPro', function () use($app) {
-    $res = User::where('privilege','PRO')->get();
+    //$res = User::where('privilege','PRO')->get();
+    $res = new User();
+
+    $res->jobs_awarded->all();
     $app->response->body($res->toJson());
 });
 

@@ -21,6 +21,11 @@ class User extends Illuminate\Database\Eloquent\Model
         return $this->hasMany('Job','poster_id','id');
     }
 
+    //Pro has many jobs awarded
+    public function jobs_awarded(){
+        return $this->hasMany('Job','awarded_to','id');
+    }
+
     //User has only one Token
     public function userToken(){
         return $this->hasOne('UserAuth', 'user_id', 'id');//hasOne('table', 'foreignKey', 'hostKey')
@@ -89,6 +94,15 @@ class User extends Illuminate\Database\Eloquent\Model
         if ($update!=null) {
             return ['status' => http_response_code(200)];
         }
+    }
+
+
+    static function get_pro(){
+        //Need to get them and order by jobs number
+       $jobs =
+       $pro = User::where('privilege','PRO')->get();
+
+
     }
 
 }
