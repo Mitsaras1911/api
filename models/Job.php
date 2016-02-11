@@ -18,41 +18,40 @@ class Job extends Illuminate\Database\Eloquent\Model
         return $this->hasMany('Feedback', 'job_id', 'id');
     }
 
-
-
-    //New Job
-    /**
-     * @param $params
-     * @return array
-     */
-    public static function new_job($params){
-
-        $date_completion = set_date($params['date_completion']);
-        $date_posted = date('Y-m-d H:i:s');
-        array_push($params,["date_completion"=>$date_completion]);
-        array_push($params,$date_completion);
-        $job = Job::insertGetId($params);
-        return ["id" => $job];
+    public function jobCategory(){
+        return $this->hasOne('JobCategory','id','categoryid');
     }
 
 
-    private static function set_date($date){
+    //Create new Job
+    public static function new_job($params){
+        $params['date_job_completion'] = Job::set_date($params['date_job_completion']);
+        $job = Job::insertGetId($params);
+        $j = Job::find($job);
+        $j->date_posted = date('Y-m-d H:i:s');
+        $j->save();
+        return ["id" => $job];
+    }
 
+    public static function set_date($date){
         switch ($date){
             case 0://ASAP 2 weeks
-                $ins_date = date('Y-m-d H:i:s',strtotime("+2 weeks"));
+                $ins_date = date('Y-m-d',strtotime("+2 weeks"));
                 break;
             case 1://Next Month
-                $ins_date = date('Y-m-d H:i:s',strtotime("+1 month"));
+                $ins_date = date('Y-m-d',strtotime("+1 month"));
                 break;
             case 3://Not Sure - 1 month
-                $ins_date = date('Y-m-d H:i:s',strtotime("+1 month"));
+                $ins_date = date('Y-m-d',strtotime("+1 month"));
                 break;
             case 4://Urgent - 1 week
-                $ins_date = date('Y-m-d H:i:s',strtotime("+1 weeks"));
+                $ins_date = date('Y-m-d',strtotime("+1 weeks"));
                 break;
             default://Specific Date
                 $ins_date = $date;
+
+
+
         }
         return $ins_date;
     }

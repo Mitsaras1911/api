@@ -23,6 +23,7 @@ class User extends Illuminate\Database\Eloquent\Model
 
     //Pro has many jobs awarded
     public function jobs_awarded(){
+
         return $this->hasMany('Job','awarded_to','id');
     }
 
@@ -43,13 +44,9 @@ class User extends Illuminate\Database\Eloquent\Model
             ->where('email',$params['email'])
             ->where('password',$params['pass'])->get();//sha1($params['pass']))
         if(count($r)==1){
-            $user_id = $r[0]->id;
-            $u = UserAuth::new_authenticate($user_id);
-            return [
-                'status'=>1,
-                'userid'=>$user_id,
-                'accessToken'=>$u
-            ];
+            $u = User::find();
+           // $u = UserAuth::new_authenticate($user_id);
+            return $u;
         }
         else{
             return
@@ -96,14 +93,6 @@ class User extends Illuminate\Database\Eloquent\Model
         }
     }
 
-
-    static function get_pro(){
-        //Need to get them and order by jobs number
-       $jobs =
-       $pro = User::where('privilege','PRO')->get();
-
-
-    }
 
 }
 

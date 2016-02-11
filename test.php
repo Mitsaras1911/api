@@ -1,4 +1,11 @@
 <?php
-$arr =["bmw"=>'a',"bqmw"=>'a',"wbmw"=>'a',"bmew"=>'a',"bmwrt"=>'a',"bmfw"=>'a'
-];
-echo json_encode($arr);
+// Variable to check
+$email = "dc.christodoulougmail.com";
+
+// Validate email
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+    echo("$email is a valid email address");
+} else {
+    echo("$email is not a valid email address");
+}
+?>

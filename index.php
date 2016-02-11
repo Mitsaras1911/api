@@ -9,8 +9,10 @@ include 'config/db_config.php';
 
 //Initiate a Slim instance
 $app = new \Slim\Slim();
+define("DEBUG_MODE", 0);
 
-//$app->add(new ExampleMiddleware());
+//Add Middleware for authentication
+$app->add(new ExampleMiddleware($debug=DEBUG_MODE));
 
 //Server cross
 header('content-type: application/json; charset=utf-8');
@@ -19,7 +21,8 @@ header("access-control-allow-origin: *");
 
 // route middleware for simple API authentication
 $app->get('/', function () use ($app) {
-    echo 'hi';
+    echo 'Hello';
+  // return $app->response->body($j->toJson());
 });
 
 //----------------------------------------
@@ -42,8 +45,8 @@ $app->post('/sign_in/', function () use($app)
 
     $params = $app->request->params();
     $r = User::sign_in($params);
-    $app->response->body( json_encode($r));
-
+   // $r->userToken = 'asd';
+    $app->response->body($r->toJson());
 });
 
 
@@ -109,11 +112,11 @@ $app->post('/email', function () use($app) {
 
 //Get all pros
 $app->get('/getPro', function () use($app) {
-    //$res = User::where('privilege','PRO')->get();
-    $res = new User();
-
-    $res->jobs_awarded->all();
-    $app->response->body($res->toJson());
+    $pros = User::where('privilege','PRO')->get();
+    $pros->sortByDesc(function($u){
+                        return $u->jobs_awarded->count();
+    });
+    $app->response->body($pros->toJson());
 });
 
 //---------------------------//
@@ -137,9 +140,9 @@ $app->get("/jobs", function () use ($app){
 
 //Job Details
 $app->get("/job/:job_id", function ($job_id) use ($app){
-    $j = Job::findOrFail($job_id);
-    $j->get();
-    $app->response->body($j->toJson());
+    $job = Job::findOrFail($job_id);
+    $job->get();
+    $app->response->body($job->toJson());
 });
 
 
@@ -148,8 +151,8 @@ $app->post('/job/new/', function () use($app) {
     $params = $app->request()->params();//Get all aprameters
     $r = Job::new_job($params);
     $user_id = $params['poster_id'];
-    $phone = $params['phone'];
-    User::where('id',$user_id)->update(["phone"=>$phone]);
+    //$phone = $params['phone'];
+    //x`User::where('id',$user_id)->update(["phone"=>$phone]);
 
     $app->response->body(json_encode($r));
 });
@@ -172,6 +175,7 @@ $app->post('/job/delete/', function () use($app) {
 });
 
 $app->post('/job/offer/', function () use($app) {
+
     $params = $app->request()->params();
     $job = new Job();
     if($job->job_offer($params))
@@ -200,9 +204,10 @@ $app->post("/feedback/update/", function () use ($app) {
 
 //Delete Feedback - OK
 $app->delete("/feedback/delete/:id", function ($id) use ($app) {
-    if(Feedback::where('id',$id)->delete()){
-        $app->response->body(json_encode(['resonse'=>http_response_code(200)]));
-    }
+    $f = Feedback::find($id);
+    $f->delete();
+    $app->response->body();
+
 });
 
 //Insert Feedback
@@ -213,7 +218,6 @@ $app->post("/feedback/set", function () use ($app) {
     $app->response->body(json_encode($set_feedback));
 });
 
-//Validate user
 
 //Run application
 $app->run();
