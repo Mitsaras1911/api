@@ -37,21 +37,23 @@ class User extends Illuminate\Database\Eloquent\Model
         return $this->hasMany('Feedback','from','id');
     }
 
-
     //User Sign In
     static function sign_in($params){
         $r = User::query()
             ->where('email',$params['email'])
-            ->where('password',$params['pass'])->get();//sha1($params['pass']))
-        if(count($r)==1){
-            $u = User::find();
-           // $u = UserAuth::new_authenticate($user_id);
-            return $u;
+            ->where('password',$params['pass'])
+            ->get();//)->toArray();//sha1($params['pass']))
+        if($r->count()==1){
+            $r = User::find($r[0]->id);
+            $r->token='asd';
+            $r->status=1;
         }
         else{
-            return
-                ['status'=>0, 'error' => 'INV_CREDITS'];
+            $r = new User();
+            $r -> status = 0;
+            $r -> error = 'INV_CREDITS';
         }
+        return $r;
     }
     //User Sign Up
     static function sign_up($params){
@@ -65,10 +67,8 @@ class User extends Illuminate\Database\Eloquent\Model
                 "error" => "INV_EMAIL"];
         }
     }
-
     //Email exists?
-    static function exists($email)
-    {
+    static function exists($email){
         return count(User::query()->where('email', $email)->get());
     }
 

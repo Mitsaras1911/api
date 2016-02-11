@@ -9,7 +9,7 @@ include 'config/db_config.php';
 
 //Initiate a Slim instance
 $app = new \Slim\Slim();
-define("DEBUG_MODE", 0);
+define("DEBUG_MODE", 1);
 
 //Add Middleware for authentication
 $app->add(new ExampleMiddleware($debug=DEBUG_MODE));
@@ -42,14 +42,10 @@ $app->get('/', function () use ($app) {
 //Sign In
 $app->post('/sign_in/', function () use($app)
 {
-
     $params = $app->request->params();
     $r = User::sign_in($params);
-   // $r->userToken = 'asd';
     $app->response->body($r->toJson());
 });
-
-
 //Sign Up
 $app->post('/sign_up/', function () use($app)
 {
