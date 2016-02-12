@@ -58,9 +58,8 @@ class User extends Illuminate\Database\Eloquent\Model
     //User Sign Up
     static function sign_up($params){
         if (filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
-            $id = User::insertGetId($params);
-            return ["status" => 1,
-                "id" => $id];
+            $newUser = User::insertGetId($params);
+            return $newUser;
         }
         else {
             return ["status" => 0,
@@ -69,7 +68,7 @@ class User extends Illuminate\Database\Eloquent\Model
     }
     //Email exists?
     static function exists($email){
-        return count(User::query()->where('email', $email)->get());
+        return User::query()->where('email', $email)->get()->count();
     }
 
     //Fetch Use's Jobs

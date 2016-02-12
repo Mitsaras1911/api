@@ -9,14 +9,13 @@ include 'config/db_config.php';
 
 //Initiate a Slim instance
 $app = new \Slim\Slim();
+//$app->response->headers->set('Content-Type', 'application/json');
 define("DEBUG_MODE", 1);
 
 //Add Middleware for authentication
 $app->add(new ExampleMiddleware($debug=DEBUG_MODE));
 
-//Server cross
-header('content-type: application/json; charset=utf-8');
-header("access-control-allow-origin: *");
+
 
 
 // route middleware for simple API authentication
@@ -43,18 +42,25 @@ $app->get('/', function () use ($app) {
 $app->post('/sign_in/', function () use($app)
 {
     $params = $app->request->params();
-    $r = User::sign_in($params);
+    //$r = User::sign_in($params);
+    $r = User::find(22078);
+    //header("Content-Type: application/json");
     $app->response->body($r->toJson());
+    //$app->response->body($r);
+
+    //echo json_encode($r);
 });
 //Sign Up
 $app->post('/sign_up/', function () use($app)
 {
     $params = $app->request->params();
-    $exists = User::exists($params['email']);
-    if($exists==0) {//No Exsists
-        $params['password']= sha1($params['password']);
+    $u = User::exists($params['email']);
+    if($u==0) {//No Exsists
+        $params['password']= sha1($params['password']);//Encrypt password
         $r = User::sign_up($params);
-        $app->response->body(json_encode($r));
+        $u = new User();
+        $u->id = $r;
+        $app->response->body($u->toJson());
     }
     else {
         $app->response->body(json_encode(["error" => "exists"]));

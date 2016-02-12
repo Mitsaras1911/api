@@ -1,11 +1,30 @@
-<?php
-// Variable to check
-$email = "dc.christodoulougmail.com";
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+                $.ajax({
+                    type: 'POST',
+                    //dataType:'json',
+                    //contentType: "application/json",
+                    url: "/sign_in",
+                    data:{
+                        email:'a',
+                        pass: '1234'
+                    },
+                    success: function(data){
+                      //  var r = $.parseJSON(data);
+                        //console.log(r);
+                        console.log(typeof data);
+                        console.log(data);
 
-// Validate email
-if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-    echo("$email is a valid email address");
-} else {
-    echo("$email is not a valid email address");
-}
-?>
+                }});
+        });
+    </script>
+</head>
+<body>
+
+<div id="data"></div>
+
+</body>
+</html>
