@@ -1,22 +1,22 @@
 <html>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="jquery.json-viewer.js"></script>
+    <link href="jquery.json-viewer.css" rel="stylesheet">
     <script>
         $(document).ready(function(){
+
+            //console
                 $.ajax({
-                    type: 'POST',
-                    //dataType:'json',
-                    //contentType: "application/json",
-                    url: "/sign_in",
-                    data:{
-                        email:'a',
-                        pass: '1234'
-                    },
+                    url: "/",
+                    type: 'GET',
+                    //dataType : "json",
+                    //contentType: "application/json; charset=utf-8",
+                    data: {user_id:22078},
                     success: function(data){
-                      //  var r = $.parseJSON(data);
-                        //console.log(r);
-                        console.log(typeof data);
-                        console.log(data);
+                        var x = JSON.parse(data);
+                        console.log(x.name);
+
 
                 }});
         });
@@ -24,7 +24,6 @@
 </head>
 <body>
 
-<div id="data"></div>
-
+<div id="json"></div>
 </body>
 </html>

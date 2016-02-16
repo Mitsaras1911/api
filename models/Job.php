@@ -28,9 +28,9 @@ class Job extends Illuminate\Database\Eloquent\Model
         $params['date_job_completion'] = Job::set_date($params['date_job_completion']);
         $job = Job::insertGetId($params);
         $j = Job::find($job);
-        $j->date_posted = date('Y-m-d H:i:s');
+        $j->date_posted = date('Y-m-d');
         $j->save();
-        return ["id" => $job];
+        return $job;
     }
 
     public static function set_date($date){

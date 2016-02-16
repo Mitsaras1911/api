@@ -72,8 +72,7 @@ class User extends Illuminate\Database\Eloquent\Model
     }
 
     //Fetch Use's Jobs
-    static function get_user_jobs($user_id)
-    {
+    static function get_user_jobs($user_id){
         $id = User::find($user_id);
         $jobs = Job::query()
             ->where('poster_id', $id)

@@ -9,19 +9,17 @@ include 'config/db_config.php';
 
 //Initiate a Slim instance
 $app = new \Slim\Slim();
-//$app->response->headers->set('Content-Type', 'application/json');
-define("DEBUG_MODE", 1);
+//$app->response()->header('Content-Type', 'application/json;charset=utf-8');
+
+//define("DEBUG_MODE", 1);
 
 //Add Middleware for authentication
-$app->add(new ExampleMiddleware($debug=DEBUG_MODE));
+//$app->add(new ExampleMiddleware($debug=DEBUG_MODE));
 
 
-
-
-// route middleware for simple API authentication
+// route middleware for simple API authenticationdfgdfdfgdfgdfgdgdfgdgfdf
 $app->get('/', function () use ($app) {
-    echo 'Hello';
-  // return $app->response->body($j->toJson());
+    echo 'hello';
 });
 
 //----------------------------------------
@@ -39,19 +37,16 @@ $app->get('/', function () use ($app) {
 
 
 //Sign In
-$app->post('/sign_in/', function () use($app)
+$app->post('/sign_in', function () use($app)
 {
     $params = $app->request->params();
-    //$r = User::sign_in($params);
+    ob_end_clean();
     $r = User::find(22078);
-    //header("Content-Type: application/json");
     $app->response->body($r->toJson());
-    //$app->response->body($r);
-
-    //echo json_encode($r);
 });
+
 //Sign Up
-$app->post('/sign_up/', function () use($app)
+$app->post('/sign_up', function () use($app)
 {
     $params = $app->request->params();
     $u = User::exists($params['email']);
@@ -142,9 +137,8 @@ $app->get("/jobs", function () use ($app){
 
 //Job Details
 $app->get("/job/:job_id", function ($job_id) use ($app){
-    $job = Job::findOrFail($job_id);
-    $job->get();
-    $app->response->body($job->toJson());
+        $job = Job::find($job_id);
+        $app->response->body($job->toJson());
 });
 
 
@@ -152,11 +146,7 @@ $app->get("/job/:job_id", function ($job_id) use ($app){
 $app->post('/job/new/', function () use($app) {
     $params = $app->request()->params();//Get all aprameters
     $r = Job::new_job($params);
-    $user_id = $params['poster_id'];
-    //$phone = $params['phone'];
-    //x`User::where('id',$user_id)->update(["phone"=>$phone]);
-
-    $app->response->body(json_encode($r));
+    $app->response->body($r);
 });
 
 //Edit Job
@@ -166,15 +156,15 @@ $app->post('/job/update', function () use($app) {
     $app->response->body($job);
 });
 
+
 //Remove Job
 $app->post('/job/delete/', function () use($app) {
     $id = $app->request()->params('id');
-    $job = Job::findOrFail($id);
-    if($job->delete())
-        return http_response_code(200);
-    else
-        return http_response_code(500);
+    $job = Job::find($id);
+    $job->active = 0;
+    $job->save();
 });
+
 
 $app->post('/job/offer/', function () use($app) {
 
