@@ -12,6 +12,7 @@ return array(
     'Job' => $baseDir . '/models/Job.php',
     'JobAwards' => $baseDir . '/models/JobAwards.php',
     'JobCategory' => $baseDir . '/models/JobCategory.php',
+    'JobOffers' => $baseDir . '/models/JobOffers.php',
     'Job_category' => $baseDir . '/models/Job_category.php',
     'User' => $baseDir . '/models/User.php',
     'UserAuth' => $baseDir . '/models/UserAuth.php',

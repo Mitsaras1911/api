@@ -19,7 +19,7 @@ $app = new \Slim\Slim();
 
 // route middleware for simple API authenticationdfgdfdfgdfgdfgdgdfgdgfdf
 $app->get('/', function () use ($app) {
-    echo 'hello';
+
 });
 
 //----------------------------------------
@@ -51,11 +51,9 @@ $app->post('/sign_up', function () use($app)
     $params = $app->request->params();
     $u = User::exists($params['email']);
     if($u==0) {//No Exsists
-        $params['password']= sha1($params['password']);//Encrypt password
+     //   $params['password']= $params['password'];//sha1($params['password']);//Encrypt password
         $r = User::sign_up($params);
-        $u = new User();
-        $u->id = $r;
-        $app->response->body($u->toJson());
+        $app->response->body($r);
     }
     else {
         $app->response->body(json_encode(["error" => "exists"]));
@@ -104,17 +102,26 @@ $app->post('/user/disable', function () use($app) {
 $app->post('/email', function () use($app) {
     $email = $app->request()->params('email');//Get email
     $res = User::exists($email);
-    $app->response->body($res->toJson());
+    ob_end_clean();
+    $app->response->body($res);
 });
 
 //Get all pros
 $app->get('/getPro', function () use($app) {
+
     $pros = User::where('privilege','PRO')->get();
     $pros->sortByDesc(function($u){
                         return $u->jobs_awarded->count();
     });
+    foreach ($pros as $pro){
+        $pro->jobs_count = $pro->jobs_awarded->count();
+    }
+
     $app->response->body($pros->toJson());
 });
+
+
+
 
 //---------------------------//
 //------JOBS FUNCTIONS-------//
@@ -153,6 +160,13 @@ $app->post('/job/new/', function () use($app) {
 $app->post('/job/update', function () use($app) {
     $params = $app->request()->params();
     $job=Job::edit_job($params);
+    $app->response->body(json_encode($job));
+});
+
+//Edit Job
+$app->post('/job/update/date', function () use($app) {
+    $params = $app->request()->params();
+    $job=Job::edit_job_dates($params);
     $app->response->body($job);
 });
 
@@ -166,15 +180,17 @@ $app->post('/job/delete/', function () use($app) {
 });
 
 
-$app->post('/job/offer/', function () use($app) {
 
-    $params = $app->request()->params();
-    $job = new Job();
-    if($job->job_offer($params))
-        return http_response_code(200);
-    else
-        return http_response_code(500);
+//Off AYS
+$app->post('/job/awarded_off_ays', function () use($app) {
+    $params = $app->request()->params();//Get email
+    $res = Job::awarded_off($params);
+    ob_end_clean();
+    $app->response->body($res);
 });
+
+
+
 
 //--------------------------//
 
@@ -206,9 +222,30 @@ $app->delete("/feedback/delete/:id", function ($id) use ($app) {
 $app->post("/feedback/set", function () use ($app) {
 
     $params = $app->request()->params();//Get all aprameters
-    $set_feedback = Feedback::set_feedback($params);
+    $set_feedback = JobOffers::set_bid();
     $app->response->body(json_encode($set_feedback));
 });
+
+
+
+
+//OFFERS
+
+$app->post("/job/offer", function () use ($app) {
+
+    $params = $app->request()->params();
+    $new_bid =JobOffers::set_bid($params);
+    $app->response->body(json_encode($new_bid));
+});
+
+$app->post("/job/get_offers", function () use ($app) {
+    $params = $app->request()->params();
+    $j = Job::find($params['id']);
+    $j->jobOffers;
+    $app->response->body($j->toJson());
+});
+
+
 
 
 //Run application

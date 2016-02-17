@@ -5,8 +5,7 @@
  * Date: 9/17/2015
  * Time: 4:43 PM
  */
-class User extends Illuminate\Database\Eloquent\Model
-{
+class User extends Illuminate\Database\Eloquent\Model{
     public $timestamps = false;
     protected $table = 'user';//Define table name
     protected $fillable = ['id'];//Do not change id field
@@ -90,6 +89,10 @@ class User extends Illuminate\Database\Eloquent\Model
             return ['status' => http_response_code(200)];
         }
     }
+
+
+
+
 
 
 }
