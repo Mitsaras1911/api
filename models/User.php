@@ -8,7 +8,7 @@
 class User extends Illuminate\Database\Eloquent\Model{
     public $timestamps = false;
     protected $table = 'user';//Define table name
-    protected $fillable = ['id'];//Do not change id field
+    protected $fillable = ['id','token'];//Do not change id field
     protected $hidden = ['password'];
 
     //Do not return password field
@@ -57,8 +57,8 @@ class User extends Illuminate\Database\Eloquent\Model{
     //User Sign Up
     static function sign_up($params){
         if (filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
-            $newUser = User::insertGetId($params);
-            return $newUser;
+
+            return User::insertGetId($params);
         }
         else {
             return ["status" => 0,
@@ -87,6 +87,47 @@ class User extends Illuminate\Database\Eloquent\Model{
         $update = User::where('id', $params['id'])->update($params);
         if ($update!=null) {
             return ['status' => http_response_code(200)];
+        }
+    }
+
+
+
+    //Create user token
+    public static function new_key($u)
+    {
+        $u = User::where('token',$u)->get();
+        $u->token = User::getGUID();
+        $u->last_date_authorized = date("Y-m-d H:i:s");
+        $u->save();
+    }
+
+    //Generate Access Token
+    public static function authenticate($token){
+        $u = User::query()
+        ->where('token',$token)// $token)
+        ->first();
+        if (count($u)==1){//User is authenticated
+            $u->token = User::getGUID();
+            $u->save();
+           return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public static function getGUID()
+    {
+        if (function_exists('com_create_guid')) {
+            return com_create_guid();
+        } else {
+            mt_srand((double)microtime() * 10000);//optional for php 4.2.0 and up.
+            $charid = strtoupper(md5(uniqid(rand(), true)));
+            $uuid = substr($charid, 0, 8)
+                    .substr($charid, 8, 4)
+                    .substr($charid, 12, 4)
+                    .substr($charid, 16, 4)
+                    .substr($charid, 20, 12);
+            return $uuid;
         }
     }
 

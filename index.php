@@ -9,17 +9,41 @@ include 'config/db_config.php';
 
 //Initiate a Slim instance
 $app = new \Slim\Slim();
-//$app->response()->header('Content-Type', 'application/json;charset=utf-8');
-
-//define("DEBUG_MODE", 1);
+//$app->response->headers->set('Content-Type', 'application/json');
 
 //Add Middleware for authentication
-//$app->add(new ExampleMiddleware($debug=DEBUG_MODE));
+//Whitelisted routes
+/*$app->add(new ExampleMiddleware([
+    '/',
+    '/sign_in',
+    'sign_up',
+    '/jobs',
+]));*/
+
+$app->hook('slim.after.router', "beforeResponse");
+function beforeResponse(){
+    //Solved some problems with JSON Objects
+    ob_end_clean();
+}
+
 
 
 // route middleware for simple API authenticationdfgdfdfgdfgdfgdgdfgdgfdf
 $app->get('/', function () use ($app) {
+   // $u =  User::find(22078);
+   
+   //
+   //$app->response->body($u->toJson());
+   
+    $pros = User::where('privilege','PRO')->get();
+    $pros->sortByDesc(function($u){
+                        return $u->jobs_awarded->count();
+    });
+    foreach ($pros as $pro){
+        $pro->jobs_count = $pro->jobs_awarded->count();
+    }
 
+    $app->response->body($pros->toJson());
 });
 
 //----------------------------------------
@@ -40,9 +64,8 @@ $app->get('/', function () use ($app) {
 $app->post('/sign_in', function () use($app)
 {
     $params = $app->request->params();
-    ob_end_clean();
-    $r = User::find(22078);
-    $app->response->body($r->toJson());
+    $r = User::sign_in($params);
+    $app->response->body($r);
 });
 
 //Sign Up
@@ -136,10 +159,10 @@ $app->get('/getPro', function () use($app) {
 
 //Job by any condition
 $app->get("/jobs", function () use ($app){
-    $jobs = Job::paginate(2);
-    //$app->response->body(Job::all()->toJson());
-    return View::make('photos.show', array('photos' => $jobs));
-    //$app->response->body(Job::paginate(2)->toJson());
+
+    $app->response->body(Job::all()->toJson());
+
+
 });
 
 //Job Details

@@ -15,7 +15,7 @@ return array(
     'JobOffers' => $baseDir . '/models/JobOffers.php',
     'Job_category' => $baseDir . '/models/Job_category.php',
     'User' => $baseDir . '/models/User.php',
-    'UserAuth' => $baseDir . '/models/UserAuth.php',
+    'UserStars' => $baseDir . '/models/UserStars.php',
     'User_categories' => $baseDir . '/models/User_categories.php',
     'User_recommendations' => $baseDir . '/models/User_recommendations.php',
 );

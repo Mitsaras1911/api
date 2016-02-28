@@ -8,26 +8,39 @@
  */
 class ExampleMiddleware extends Slim\Middleware {
 
-    public function __construct($debug) {
+    public function __construct($whitelist) {
         //Define the urls that you want to exclude from Authentication, aka public urls
-        $this->whiteList =['/'];
-        $this->debug = $debug;
+        $this->whiteList =$whitelist;
     }
 
-    public function call()
-    {
-        // Get reference to application
-        $app = $this->app;
-        if($this->debug==0) {
+    /**
+     * User Athentication
+     * Client requests with token.
+     * Verify if exists
+     * Change his token
+     * Response the new token
+     */
+
+    public function call(){
+
+        $path = $this->app->request()->getPath();
+        if(in_array($path, $this->whiteList)) {
+            //Not to be authenticated
+            $this->next->call();
+        } else{
+            //Authenticate user
             $token = $this->app->request->params('token');
-            $user_id = $this->app->request->params('user_id');
-            $res = UserAuth::authenticate($token);
-            if ($res){
-                $this->app->response->body();
-            } else {
-                $this->app->response->body(json_encode(['error' => 'denied']));
+            $result = User::authenticate($token);
+            if ($result) {
+                //Everything ok, call next middleware
+                $this->next->call();
+
+
+            } else{
+                //Handle Error
+                $this->app->response->body(json_encode(['error'=>'denied']));
             }
         }
-        $this->next->call();
     }
+
 }

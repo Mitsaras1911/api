@@ -17,7 +17,7 @@ class Job extends Illuminate\Database\Eloquent\Model
     {
         $j = Job::find($params['job_id'],['date_job_completion']);
         $a = new DateTime($j->date_job_completion);
-        $a->modify('+1 month');
+        $a->modify('+1 week');
         $j->date_job_completion = $a->format("Y-m-d");
         $j->save();
         return $j;
